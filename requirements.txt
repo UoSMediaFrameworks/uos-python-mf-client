@@ -1,0 +1,4 @@
+mf-client==0.0.3
+socketIO-client==0.7.2
+click=6.7
+click-repl=0.1.2
