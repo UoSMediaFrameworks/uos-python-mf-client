@@ -10,6 +10,21 @@
 
 # Features of the REPL
 
+**External to REPL**
 Before running a repl, the features of the application can be displayed
 
-```python mf-input-client.py --help```
+```bash 
+python mf-input-client.py --help
+```
+
+**During REPL**
+
+```bash
+> :!help
+```
+
+Note: the ! enables external commands, ie commands accessed outside of the REPL
+
+## Exiting the repl
+
+``` > :exit ```

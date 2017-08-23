@@ -6,9 +6,10 @@ from mf_client.MF_API_Client import *
 # dev scenes
 # "586f8524b8678acc10b1595c"
 # "596636589d6362d01a6374d9"
+# S1XE7lodb
 
 # Setup an authenticated connection to a controller
-mf_ws_in_client = MF_API_Client('http://localhost', 6000, 'kittens')
+mf_ws_in_client = MF_API_Client('http://localhost', 3000, 'kittens')
 session_roomid = ""
 
 @click.group()
@@ -56,10 +57,32 @@ def play_scene_theme(roomid, sceneid, theme):
 
 
 @cli.command()
-@click.option('--sceneName', help='Find a scene identifier by scene name')
+@click.option('--scene_name', help='Find a scene identifier by scene name')
 def find_scene_by_name(scene_name):
-    """Not yet implemented."""
-    click.echo('Not implemented in client library yet')
+    """Find a scene by name."""
+
+    def scene_received(scene):
+        click.echo(scene)
+
+    mf_ws_in_client.getSceneByName(scene_name, scene_received)
+
+
+@cli.command()
+@click.option('--roomid', prompt='Enter display id', help='Display room identifier')
+@click.option('--scene_name', help='Play a scene by name')
+def play_scene_by_name(roomid, scene_name):
+    """Play a scene (if found) by name."""
+
+    def scene_received(scene):
+        # APEP capture any exceptions and assume its an Attribute error based off missing scene from scene name
+        # We could handle this more gracefully
+        try:
+            mf_ws_in_client.sendScene(roomid, scene['_id'])
+            click.echo('Sent command')
+        except:
+            click.echo("Failed to play scene by name")
+
+    mf_ws_in_client.getSceneByName(scene_name, scene_received)
 
 register_repl(cli)
 
